@@ -1,0 +1,5 @@
+google sheet:
+https://docs.google.com/spreadsheets/d/1MfR5jq3mBPYmDnU8HgyfjOhU_J-DDQBM7UU0j1o9J2g/edit?gid=0#gid=0
+
+google script:
+https://script.google.com/macros/s/AKfycbx16XzhCC8jnzQwEf4KWBxdRr3UmFkB-N1Ei5DW52zkj9LvhpQu8vN6hLGtgOM88nc_9Q/exec
