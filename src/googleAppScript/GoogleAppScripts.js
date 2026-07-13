@@ -1,8 +1,7 @@
-function doGet(e) {
-    const SHEET_NAME = e.parameter.sheet ? e.parameter.sheet : "orders";
-    
+function doGet(e) {  
     try {
-        const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+        const sheetName = e.parameter.sheet || "orders";
+        const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
 
         const values = sheet.getDataRange().getValues();
 
@@ -39,6 +38,9 @@ function doGet(e) {
 }
 
 function doPost(e) {
+  Logger.log(JSON.stringify(e.parameter));
+  Logger.log(e.postData.contents);
+  
   try {
     const body = JSON.parse(e.parameter.payload);
 
@@ -69,7 +71,7 @@ function doPost(e) {
 
 function addOrder(order) {
 
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("orders");
 
   const lastRow = sheet.getLastRow();
 
@@ -99,7 +101,7 @@ function addOrder(order) {
 
 function editOrder(order) {
 
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("orders");
 
   const values = sheet.getDataRange().getValues();
 
@@ -131,7 +133,7 @@ function editOrder(order) {
 
 function deleteOrder(id) {
 
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("orders");
 
   const values = sheet.getDataRange().getValues();
 

@@ -2,7 +2,8 @@ import React, { useMemo, useState } from "react";
 
 const InventoryList = ({
   inventories,
-  loading
+  loading,
+  onRefresh
 }) => {
   if (loading) {
     return (
@@ -20,6 +21,9 @@ const InventoryList = ({
       {/* Header */}
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 m-4">
         <h1 className="text-2xl font-bold">Inventory</h1>
+        <button className="btn btn-primary" onClick={onRefresh}>
+          Refresh
+        </button>
       </div>
 
       {/* Table */}

@@ -1,12 +1,12 @@
 const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbwZpuFMRQclPeg5CytOQjz-L9pRs9mNbp2UbjHBogYCh4cI57XIse7cL_w-Cm1Tx4mgpw/exec?sheet=orders";
+  "https://script.google.com/macros/s/AKfycbwZpuFMRQclPeg5CytOQjz-L9pRs9mNbp2UbjHBogYCh4cI57XIse7cL_w-Cm1Tx4mgpw/exec";
 
 /**
  * Fetch all orders
  */
 export const getOrders = async () => {
   try {
-    const response = await fetch(GOOGLE_SCRIPT_URL);
+    const response = await fetch(GOOGLE_SCRIPT_URL + "?sheet=orders");
 
     if (!response.ok) {
       throw new Error("Failed to fetch orders.");

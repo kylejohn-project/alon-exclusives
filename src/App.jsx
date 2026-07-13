@@ -10,7 +10,7 @@ import {
   deleteOrder,
 } from "./services/OrderServices";
 
-import { getVariants } from "./services/InventoryService";
+import { getVariants, refreshVariants } from "./services/InventoryService";
 import InventoryList from "./components/InvetoryList";
 
 function App() {
@@ -118,6 +118,14 @@ function App() {
     }
   };
 
+  const handleRefresh = async () => {
+    try {
+      await refreshVariants();
+    } catch (error) {
+      console.error("error refreshing variants: ", error);
+    }
+  };
+
   return (
     <>
       <NavBar />
@@ -141,6 +149,7 @@ function App() {
       <InventoryList
         inventories={inventories}
         loading={loadingStocks}
+        onRefresh={handleRefresh}
       />
     </>
   );
