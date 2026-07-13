@@ -12,7 +12,9 @@ const NavBar = () => {
         tabIndex="-1"
         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
         <li><a>Dashboard</a></li>
-        <li><a>Add Order</a></li>
+        <li><a>Orders</a></li>
+        <li><a>Expenses</a></li>
+        <li><a>Inventory</a></li>
       </ul>
     </div>
     <a className="btn btn-ghost text-xl">Alon Exclusives</a>
@@ -20,7 +22,9 @@ const NavBar = () => {
   <div className="navbar-end hidden lg:flex">
     <ul className="menu menu-horizontal px-1">
       <li><a>Dashboard</a></li>
-      <li><a>Add Order</a></li>
+      <li><a>Orders</a></li>
+      <li><a>Expenses</a></li>
+      <li><a>Inventory</a></li>
     </ul>
   </div>
 </div>

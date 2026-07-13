@@ -10,14 +10,19 @@ import {
   deleteOrder,
 } from "./services/OrderServices";
 
+import { getVariants } from "./services/InventoryService";
+import InventoryList from "./components/InvetoryList";
+
 function App() {
   const [orders, setOrders] = useState([]);
+  const [inventories, setInventories] = useState([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("add");
   const [selectedOrder, setSelectedOrder] = useState(null);
 
   const [loading, setLoading] = useState(true);
+  const [loadingStocks, setLoadingStocks] = useState(true);
 
   /**
    * Load Orders
@@ -37,8 +42,22 @@ function App() {
     }
   };
 
+  const loadVariants = async () => {
+    try {
+      setLoadingStocks(true);
+      const stocks = await getVariants();
+      setInventories(stocks);
+    } catch (err) {
+      console.error(err);
+      alert("Unable to load variants.");
+    } finally {
+      setLoadingStocks(false);
+    }
+  };
+
   useEffect(() => {
     loadOrders();
+    loadVariants();
   }, []);
 
   /**
@@ -117,6 +136,11 @@ function App() {
         order={selectedOrder}
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleSubmit}
+      />
+
+      <InventoryList
+        inventories={inventories}
+        loading={loadingStocks}
       />
     </>
   );

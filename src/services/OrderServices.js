@@ -1,5 +1,5 @@
 const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbx16XzhCC8jnzQwEf4KWBxdRr3UmFkB-N1Ei5DW52zkj9LvhpQu8vN6hLGtgOM88nc_9Q/exec";
+  "https://script.google.com/macros/s/AKfycbwZpuFMRQclPeg5CytOQjz-L9pRs9mNbp2UbjHBogYCh4cI57XIse7cL_w-Cm1Tx4mgpw/exec?sheet=orders";
 
 /**
  * Fetch all orders
