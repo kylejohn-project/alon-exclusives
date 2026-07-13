@@ -13,6 +13,11 @@ import {
 import { getVariants, refreshVariants } from "./services/InventoryService";
 import InventoryList from "./components/InvetoryList";
 
+import Orders from "./pages/Orders";
+import Inventory from "./pages/Inventory";
+import Expenses from "./pages/Expenses";
+import Dashboard from "./pages/Dashboard";
+
 function App() {
   const [orders, setOrders] = useState([]);
   const [inventories, setInventories] = useState([]);
