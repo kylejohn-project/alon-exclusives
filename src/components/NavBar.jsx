@@ -11,7 +11,7 @@ const NavBar = () => {
       </div>
       <ul
         tabIndex="-1"
-        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow gap-2">
         <Link to="/" className='hover:text-orange-300'>Dashboard</Link>
         <Link to="/orders" className='hover:text-orange-300'>Orders</Link>
         <Link to="/expenses" className='hover:text-orange-300'>Expenses</Link>
@@ -21,7 +21,7 @@ const NavBar = () => {
     <a className="btn btn-ghost text-xl">Alon Exclusives</a>
   </div>
   <div className="navbar-end hidden lg:flex">
-    <ul className="menu menu-horizontal px-1">
+    <ul className="menu menu-horizontal px-1 text-md gap-5">
       <Link to="/" className='hover:text-orange-300'>Dashboard</Link>
       <Link to="/orders" className='hover:text-orange-300'>Orders</Link>
       <Link to="/expenses" className='hover:text-orange-300'>Expenses</Link>
