@@ -1,58 +1,58 @@
 function doGet(e) {  
-    try {
-        const sheetName = e.parameter.sheet || "orders";
-        const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
+  try {
+    const sheetName = e.parameter.sheet || "orders";
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
 
-        const values = sheet.getDataRange().getValues();
+    const values = sheet.getDataRange().getValues();
 
-        if (values.length <= 1) {
-            return json({
-            result: "success",
-            data: [],
-            });
-        }
-
-        const headers = values.shift();
-
-        const data = values.map(row => {
-            const obj = {};
-
-            headers.forEach((header, index) => {
-            obj[String(header).toLowerCase().replace(/\s+/g, "")] = row[index];
-            });
-
-            return obj;
-        });
-
+    if (values.length <= 1) {
         return json({
-            result: "success",
-            data,
-        });
-
-        } catch (err) {
-        return json({
-            result: "error",
-            message: err.toString(),
+        result: "success",
+        data: [],
         });
     }
+
+    const headers = values.shift();
+
+    const data = values.map(row => {
+        const obj = {};
+
+        headers.forEach((header, index) => {
+        obj[String(header).toLowerCase().replace(/\s+/g, "")] = row[index];
+        });
+
+        return obj;
+    });
+
+    return json({
+        result: "success",
+        data,
+    });
+
+    } catch (err) {
+    return json({
+        result: "error",
+        message: err.toString(),
+    });
+  }
 }
 
 function doPost(e) {
-  Logger.log(JSON.stringify(e.parameter));
-  Logger.log(e.postData.contents);
-  
   try {
     const body = JSON.parse(e.parameter.payload);
 
     switch (body.action) {
       case "add":
-        return addOrder(body.data);
+      case "addExpense":
+        return addRow(body);
 
       case "edit":
-        return editOrder(body.data);
+      case "editExpense":
+        return editRow(body);
 
       case "delete":
-        return deleteOrder(body.id);
+      case "deleteExpense":
+        return deleteRow(body);
       
       case "refresh":
         return refreshInventory(body.data);
@@ -72,9 +72,10 @@ function doPost(e) {
   }
 }
 
-function addOrder(order) {
+function addRow(body) {
 
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("orders");
+  const sheetName = body.action == "edit" ? "orders" : "expenses";
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("sheetName");
 
   const lastRow = sheet.getLastRow();
 
@@ -83,17 +84,28 @@ function addOrder(order) {
     ? 1
     : Number(sheet.getRange(lastRow, 1).getValue()) + 1;
 
-  sheet.appendRow([
-    id,
-    order.name,
-    order.size,
-    order.ispaid,
-    order.amount,
-    order.dateordered,
-    order.orderfrom,
-    order.isdelivered,
-    order.notes,
-  ]);
+  if (body.action == "edit") {
+    sheet.appendRow([
+      id,
+      body.data.name,
+      body.data.size,
+      body.data.ispaid,
+      body.data.amount,
+      body.data.dateordered,
+      body.data.orderfrom,
+      body.data.isdelivered,
+      body.data.notes
+    ]);
+  } else {
+      sheet.appendRow([
+        id,
+        body.data.name,
+        body.data.amount,
+        body.data.date,
+        body.data.ispaid,
+        body.data.notes
+      ]);
+  }
 
   return json({
     result: "success",
@@ -102,29 +114,43 @@ function addOrder(order) {
   });
 }
 
-function editOrder(order) {
+function editRow(body) {
 
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("orders");
+  const sheetName = body.action == "edit" ? "orders" : "expenses";
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("sheetName");
 
   const values = sheet.getDataRange().getValues();
 
   for (let i = 1; i < values.length; i++) {
+    if (String(values[i][0]) === String(body.data.id)) {
 
-    if (String(values[i][0]) === String(order.id)) {
+      if (body.action == "edit") {
+        sheet.getRange(i + 1, 2).setValue(body.data.name);
+        sheet.getRange(i + 1, 3).setValue(body.data.size);
+        sheet.getRange(i + 1, 4).setValue(body.data.ispaid);
+        sheet.getRange(i + 1, 5).setValue(body.data.amount);
+        sheet.getRange(i + 1, 6).setValue(body.data.dateordered);
+        sheet.getRange(i + 1, 7).setValue(body.data.orderfrom);
+        sheet.getRange(i + 1, 8).setValue(body.data.isdelivered);
+        sheet.getRange(i + 1, 9).setValue(body.data.notes);
 
-      sheet.getRange(i + 1, 2).setValue(order.name);
-      sheet.getRange(i + 1, 3).setValue(order.size);
-      sheet.getRange(i + 1, 4).setValue(order.ispaid);
-      sheet.getRange(i + 1, 5).setValue(order.amount);
-      sheet.getRange(i + 1, 6).setValue(order.dateordered);
-      sheet.getRange(i + 1, 7).setValue(order.orderfrom);
-      sheet.getRange(i + 1, 8).setValue(order.isdelivered);
-      sheet.getRange(i + 1, 9).setValue(order.notes);
+        return json({
+          result: "success",
+          message: "Order updated.",
+        });
+      }
+      else {
+        sheet.getRange(i + 1, 2).setValue(body.data.name);
+        sheet.getRange(i + 1, 3).setValue(body.data.amount);
+        sheet.getRange(i + 1, 4).setValue(body.data.date);
+        sheet.getRange(i + 1, 5).setValue(body.data.ispaid);
+        sheet.getRange(i + 1, 6).setValue(body.data.notes);
 
-      return json({
-        result: "success",
-        message: "Order updated.",
-      });
+        return json({
+          result: "success",
+          message: "Expese updated.",
+        });
+      }
     }
   }
 
@@ -134,28 +160,29 @@ function editOrder(order) {
   });
 }
 
-function deleteOrder(id) {
+function deleteRow(body) {
 
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("orders");
+  const sheetName = body.action == "edit" ? "orders" : "expenses";
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("sheetName");
 
   const values = sheet.getDataRange().getValues();
 
   for (let i = 1; i < values.length; i++) {
 
-    if (String(values[i][0]) === String(id)) {
+    if (String(values[i][0]) === String(body.id)) {
 
       sheet.deleteRow(i + 1);
 
       return json({
         result: "success",
-        message: "Order deleted.",
+        message: body.action == "edit" ? "Order deleted.": "Expense deleted",
       });
     }
   }
 
   return json({
     result: "error",
-    message: "Order not found.",
+    message: body.action == "edit" ? "Order not found." : "Expense not found.",
   });
 }
 
