@@ -53,6 +53,9 @@ function doPost(e) {
 
       case "delete":
         return deleteOrder(body.id);
+      
+      case "refresh":
+        return refreshInventory(body.data);
 
       default:
         return json({
@@ -153,6 +156,32 @@ function deleteOrder(id) {
   return json({
     result: "error",
     message: "Order not found.",
+  });
+}
+
+function refreshInventory(data) {
+
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("variants");
+  const values = sheet.getDataRange().getValues();
+
+  // Create lookup: size -> row number
+  const rows = {};
+
+  for (let i = 1; i < values.length; i++) {
+    rows[values[i][3]] = i + 1; // Sheet row number
+  }
+
+  data.forEach(item => {
+    const row = rows[item.size];
+
+    if (row) {
+      sheet.getRange(row, 6).setValue(item.qty); // Reserved
+    }
+  });
+
+  return json({
+    result: "success",
+    message: "Inventory updated.",
   });
 }
 

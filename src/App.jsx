@@ -92,6 +92,7 @@ function App() {
       await deleteOrder(order.id);
 
       await loadOrders();
+      await handleRefresh();
     } catch (err) {
       console.error(err);
       alert("Failed to delete order.");
@@ -112,6 +113,7 @@ function App() {
       setIsModalOpen(false);
 
       await loadOrders();
+      await handleRefresh();
     } catch (err) {
       console.error(err);
       alert("Unable to save order.");
@@ -121,6 +123,7 @@ function App() {
   const handleRefresh = async () => {
     try {
       await refreshVariants();
+      await loadVariants();
     } catch (error) {
       console.error("error refreshing variants: ", error);
     }

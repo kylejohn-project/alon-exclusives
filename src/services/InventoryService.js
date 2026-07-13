@@ -45,6 +45,44 @@ export const refreshVariants = async () => { //will only work for one product fo
 
         console.log("sizes: ", sizes);
 
+        var inventory = [
+          {
+            'size': 'M',
+            'qty': sizes['M']
+          },
+          {
+            'size': 'L',
+            'qty': sizes['L']
+          },
+          {
+            'size': 'XL',
+            'qty': sizes['XL']
+          },
+          {
+            'size': '2XL',
+            'qty': sizes['2XL']
+          }
+        ]
+
+        console.log("inventory: ", inventory);
+
+        const body = new URLSearchParams();
+
+        body.append(
+        "payload",
+        JSON.stringify({
+            action: "refresh",
+            data: inventory,
+        })
+        );
+
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        body,
+        });
+
+        return await response.json();
+
     } catch (error) {
         console.error("error updating inventory: ", error);
     }
